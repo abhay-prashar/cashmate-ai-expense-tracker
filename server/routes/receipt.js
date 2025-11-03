@@ -12,8 +12,23 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage, limits: { fileSize: 10 * 1024 * 1024 } }); // Limit file size (e.g., 10MB)
 
-// Initialize Google Cloud Vision client
-const visionClient = new ImageAnnotatorClient();
+// --- START: NEW CREDENTIALS LOGIC ---
+let visionClient;
+if (process.env.GCP_CREDENTIALS_JSON) {
+    // For production on Render: Parse the JSON from the environment variable
+    try {
+        const credentials = JSON.parse(process.env.GCP_CREDENTIALS_JSON);
+        visionClient = new ImageAnnotatorClient({ credentials });
+    } catch (e) {
+        console.error('Failed to parse GCP_CREDENTIALS_JSON:', e);
+    }
+} else if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    // For local development: Use the JSON file path
+    visionClient = new ImageAnnotatorClient();
+} else {
+    console.error('GCP credentials not found. Set GCP_CREDENTIALS_JSON or GOOGLE_APPLICATION_CREDENTIALS');
+}
+// --- END: NEW CREDENTIALS LOGIC ---
 
 // Initialize Gemini client
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
