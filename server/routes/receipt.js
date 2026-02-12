@@ -32,7 +32,7 @@ if (process.env.GCP_CREDENTIALS_JSON) {
 
 // Initialize Gemini client
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const geminiModel = genAI.getGenerativeModel({ model: "gemini-2.0-flash" }); // Use your working model
+const geminiModel = genAI.getGenerativeModel({ model: "gemini-2.5-flash" }); // Use your working model
 
 // Define allowed categories for Gemini
 const studentCategories = [

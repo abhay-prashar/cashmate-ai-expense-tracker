@@ -42,7 +42,7 @@ router.post('/insights', auth, async (req, res) => {
        return res.json({ insights: '• Add a few more expenses or income entries to get detailed insights! 📊' });
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const prompt = `
       You are CashMate, a sharp, no-fluff finance buddy for a college student in Chandigarh, India, managing limited pocket money.
