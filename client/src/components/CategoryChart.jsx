@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useMemo } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -8,30 +6,25 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function CategoryChart({ transactions = [] }) {
-  
-  // 'useMemo' is a React hook that re-calculates data only when 'transactions' changes.
-  // This is much more efficient than re-calculating on every render.
+  // 'useMemo' re-calculates data only when 'transactions' changes.
   const categoryData = useMemo(() => {
     const categoryMap = {};
 
     // Filter for expenses and sum them up by category
     transactions.forEach((tx) => {
       if (tx.type === 'expense') {
-        // If the category isn't in our map, add it with a value of 0
         if (!categoryMap[tx.category]) {
           categoryMap[tx.category] = 0;
         }
-        // Add the transaction amount to its category
         categoryMap[tx.category] += tx.amount;
       }
     });
 
-    // We need two separate arrays for Chart.js: one for labels, one for data
     const labels = Object.keys(categoryMap);
     const data = Object.values(categoryMap);
 
     return { labels, data };
-  }, [transactions]); // This dependency array tells 'useMemo' when to run
+  }, [transactions]);
 
   // Data object for the Doughnut chart
   const chartData = {
@@ -56,19 +49,19 @@ export default function CategoryChart({ transactions = [] }) {
     ],
   };
 
-  // Options for the chart (e.g., responsiveness)
+  // Options for the chart
   const options = {
     responsive: true,
     plugins: {
       legend: {
-        position: 'right', // Moves the legend to the right like in your design
+        position: 'right',
         labels: {
-          padding: 20, // Adds some space to the legend items
+          padding: 20,
           boxWidth: 12,
           font: {
-            size: 12
-          }
-        }
+            size: 12,
+          },
+        },
       },
     },
     cutout: '60%', // Makes it a doughnut chart

@@ -1,44 +1,43 @@
-
-'use client';
-
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import Navbar from '../components/Navbar'; 
-import Link from 'next/link';
+import { useNavigate, Link } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 
 export default function AllTransactionsPage() {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [deletingIds, setDeletingIds] = useState([]);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTransactions = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
-        router.push('/login'); 
+        navigate('/login');
         return;
       }
       const config = { headers: { 'x-auth-token': token } };
       try {
-    // Fetch ALL transactions from the backend
-  const res = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000'}/api/transactions`, config);
+        // Fetch ALL transactions from the backend
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_BASE || 'http://localhost:5000'}/api/transactions`,
+          config
+        );
         setTransactions(res.data); // Store all fetched transactions
       } catch (err) {
         console.error('Error fetching transactions:', err);
         setError('Failed to load transactions.');
         if (err.response && err.response.status === 401) {
           localStorage.removeItem('token');
-          router.push('/login');
+          navigate('/login');
         }
       } finally {
         setLoading(false);
       }
     };
     fetchTransactions();
-  }, [router]);
+  }, [navigate]);
 
   // Helper function to format currency
   const formatCurrency = (amount) => {
@@ -50,7 +49,7 @@ export default function AllTransactionsPage() {
     });
   };
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000';
+  const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
 
   // Delete a transaction
   const handleDelete = async (id) => {
@@ -59,26 +58,26 @@ export default function AllTransactionsPage() {
 
     const token = localStorage.getItem('token');
     if (!token) {
-      router.push('/login');
+      navigate('/login');
       return;
     }
 
     try {
-      setDeletingIds(prev => [...prev, id]);
+      setDeletingIds((prev) => [...prev, id]);
       const config = { headers: { 'x-auth-token': token } };
       await axios.delete(`${API_BASE}/api/transactions/${id}`, config);
       // Remove from local state
-      setTransactions(prev => prev.filter(t => t._id !== id));
+      setTransactions((prev) => prev.filter((t) => t._id !== id));
     } catch (err) {
       console.error('Error deleting transaction:', err);
       if (err.response && err.response.status === 401) {
         localStorage.removeItem('token');
-        router.push('/login');
+        navigate('/login');
       } else {
         setError(err.response?.data?.msg || 'Failed to delete transaction.');
       }
     } finally {
-      setDeletingIds(prev => prev.filter(x => x !== id));
+      setDeletingIds((prev) => prev.filter((x) => x !== id));
     }
   };
 
@@ -94,13 +93,13 @@ export default function AllTransactionsPage() {
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <Navbar /> 
+      <Navbar />
 
-      <main className="max-w-4xl mx-auto p-4 md:p-8"> 
+      <main className="max-w-4xl mx-auto p-4 md:p-8">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold text-gray-800">All Transactions</h2>
-          <Link href="/dashboard" className="text-indigo-600 hover:text-indigo-800 font-medium">
-             &larr; Back to Dashboard
+          <Link to="/dashboard" className="text-indigo-600 hover:text-indigo-800 font-medium">
+            &larr; Back to Dashboard
           </Link>
         </div>
 
@@ -116,7 +115,7 @@ export default function AllTransactionsPage() {
             {transactions.length === 0 ? (
               <p className="text-gray-500 text-center py-4">You have no transactions yet.</p>
             ) : (
-              transactions.map(tx => (
+              transactions.map((tx) => (
                 <div
                   key={tx._id}
                   className="flex justify-between items-center p-3 border-b border-gray-100 last:border-b-0 hover:bg-gray-50 rounded-md"
@@ -129,7 +128,8 @@ export default function AllTransactionsPage() {
                   </div>
                   <div className="flex items-center gap-4">
                     <div className={`font-bold text-lg ${tx.type === 'expense' ? 'text-red-600' : 'text-green-600'}`}>
-                      {tx.type === 'expense' ? '- ' : '+ '}{formatCurrency(Math.abs(tx.amount))}
+                      {tx.type === 'expense' ? '- ' : '+ '}
+                      {formatCurrency(Math.abs(tx.amount))}
                     </div>
                     <button
                       onClick={() => handleDelete(tx._id)}
@@ -141,9 +141,20 @@ export default function AllTransactionsPage() {
                       {deletingIds.includes(tx._id) ? (
                         <span className="text-sm text-red-600">Deleting...</span>
                       ) : (
-                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                      </svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="w-5 h-5"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                          />
+                        </svg>
                       )}
                     </button>
                   </div>

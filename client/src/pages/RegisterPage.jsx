@@ -1,11 +1,6 @@
-// client/app/register/page.js
-
-'use client'; 
-
 import { useState } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link'; // Import Link for navigation
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -15,7 +10,7 @@ export default function RegisterPage() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const router = useRouter(); 
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setError(''); // Clear error on change
@@ -26,14 +21,16 @@ export default function RegisterPage() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
-  const res = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:5000'}/api/auth/register`, formData);
-      router.push('/login'); 
-
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE || 'http://localhost:5000'}/api/auth/register`,
+        formData
+      );
+      navigate('/login');
     } catch (err) {
       const errMsg = err.response?.data?.msg || 'Registration failed. Please try again.';
       console.error('Registration failed:', errMsg);
@@ -63,8 +60,8 @@ export default function RegisterPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name Field */}
           <div>
-            <label 
-              htmlFor="name" 
+            <label
+              htmlFor="name"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Name
@@ -83,8 +80,8 @@ export default function RegisterPage() {
 
           {/* Email Field */}
           <div>
-            <label 
-              htmlFor="email" 
+            <label
+              htmlFor="email"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Email address
@@ -103,8 +100,8 @@ export default function RegisterPage() {
 
           {/* Password Field */}
           <div>
-            <label 
-              htmlFor="password" 
+            <label
+              htmlFor="password"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Password
@@ -123,10 +120,14 @@ export default function RegisterPage() {
           </div>
 
           {/* Submit Button */}
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             disabled={loading}
-            className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${loading ? 'bg-indigo-400' : 'bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'} transition duration-150 ease-in-out`}
+            className={`w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
+              loading
+                ? 'bg-indigo-400'
+                : 'bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+            } transition duration-150 ease-in-out`}
           >
             {loading ? 'Creating Account...' : 'Register'}
           </button>
@@ -135,7 +136,7 @@ export default function RegisterPage() {
         {/* Link to Login Page */}
         <p className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{' '}
-          <Link href="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
+          <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
             Sign in
           </Link>
         </p>

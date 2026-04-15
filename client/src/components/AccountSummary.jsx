@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useMemo } from 'react';
 
 // Helper function to format currency
@@ -13,7 +11,6 @@ const formatCurrency = (amount) => {
 };
 
 export default function AccountSummary({ transactions = [], className = '' }) {
-
   const { totalIncome, totalExpenses, netBalance, expensePercentage } = useMemo(() => {
     let income = 0;
     let expenses = 0;
@@ -23,7 +20,7 @@ export default function AccountSummary({ transactions = [], className = '' }) {
     });
     const balance = income - expenses;
     // Cap percentage display for visual sanity
-    const percentage = income > 0 ? Math.min((expenses / income) * 100, 1000) : (expenses > 0 ? 1000 : 0); 
+    const percentage = income > 0 ? Math.min((expenses / income) * 100, 1000) : expenses > 0 ? 1000 : 0;
 
     return {
       totalIncome: income,
@@ -34,7 +31,7 @@ export default function AccountSummary({ transactions = [], className = '' }) {
   }, [transactions]);
 
   return (
-    <div className={`bg-white p-6 rounded-lg shadow-md flex flex-col ${className}`}> 
+    <div className={`bg-white p-6 rounded-lg shadow-md flex flex-col ${className}`}>
       <div>
         <h3 className="text-xl font-semibold text-gray-800 mb-4">Account Summary</h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
@@ -55,12 +52,10 @@ export default function AccountSummary({ transactions = [], className = '' }) {
         </div>
       </div>
 
-      <div className="mt-auto pt-4"> 
+      <div className="mt-auto pt-4">
         <div className="flex justify-between text-xs text-gray-500 mb-1">
           <span>Expenses</span>
-          <span>
-             {expensePercentage > 100 ? `>100%` : `${expensePercentage.toFixed(0)}%`} of Income
-          </span>
+          <span>{expensePercentage > 100 ? `>100%` : `${expensePercentage.toFixed(0)}%`} of Income</span>
         </div>
         <div className="bg-gray-200 rounded-full h-2.5 w-full overflow-hidden">
           <div
@@ -69,9 +64,7 @@ export default function AccountSummary({ transactions = [], className = '' }) {
           ></div>
         </div>
         {expensePercentage > 100 && (
-            <p className="text-xs text-red-600 mt-1 text-right font-medium">
-              Warning: Expenses exceed income!
-            </p>
+          <p className="text-xs text-red-600 mt-1 text-right font-medium">Warning: Expenses exceed income!</p>
         )}
       </div>
     </div>

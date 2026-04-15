@@ -1,27 +1,23 @@
-'use client'; 
-
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation'; 
-import Link from 'next/link';
+import { useNavigate, Link } from 'react-router-dom';
 import { CheckCircleIcon } from '@heroicons/react/24/solid';
 
 export default function LandingPage() {
-  const [isLoading, setIsLoading] = useState(true); 
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Check for a token in the browser's storage
     const token = localStorage.getItem('token');
-    
+
     if (token) {
       // If token exists, redirect to the dashboard
-      router.push('/dashboard');
+      navigate('/dashboard');
     } else {
       // If no token, stop loading and show the landing page
       setIsLoading(false);
     }
-  }, [router]); // Run this check once on page load
-  
+  }, [navigate]); // Run this check once on page load
 
   const features = [
     {
@@ -30,7 +26,7 @@ export default function LandingPage() {
     },
     {
       name: 'Scan Receipts Instantly',
-      description: 'Use your phone\'s camera to scan receipts, and let our app auto-fill the details. No more manual typing!',
+      description: "Use your phone's camera to scan receipts, and let our app auto-fill the details. No more manual typing!",
     },
     {
       name: 'Visual Category Tracking',
@@ -41,7 +37,6 @@ export default function LandingPage() {
       description: 'Track your expenses on the go. Our app is designed to work perfectly on your phone.',
     },
   ];
-
 
   if (isLoading) {
     return (
@@ -56,13 +51,13 @@ export default function LandingPage() {
       <header className="absolute inset-x-0 top-0 z-50">
         <nav className="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
           <div className="flex lg:flex-1">
-            <Link href="/" className="-m-1.5 p-1.5">
+            <Link to="/" className="-m-1.5 p-1.5">
               <span className="text-2xl font-bold text-blue-600">CashMate</span>
             </Link>
           </div>
           <div className="lg:flex lg:flex-1 lg:justify-end">
-            <Link 
-              href="/login" 
+            <Link
+              to="/login"
               className="text-sm font-semibold leading-6 text-gray-900 hover:text-gray-700"
             >
               Log in <span aria-hidden="true">&rarr;</span>
@@ -95,13 +90,13 @@ export default function LandingPage() {
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <Link
-                href="/register"
-                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500  focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                to="/register"
+                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Get Started for Free
               </Link>
-              <Link 
-                href="/login" 
+              <Link
+                to="/login"
                 className="text-sm font-semibold leading-6 text-gray-900"
               >
                 Log in <span aria-hidden="true">&rarr;</span>
@@ -141,12 +136,11 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="bg-white py-10">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-            <p className="text-center text-xs leading-5 text-gray-500">
-                &copy; 2025 CashMate. A project for students.
-            </p>
+          <p className="text-center text-xs leading-5 text-gray-500">
+            &copy; 2025 CashMate. A project for students.
+          </p>
         </div>
       </footer>
     </div>
   );
 }
-
