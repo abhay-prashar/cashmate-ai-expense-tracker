@@ -16,7 +16,7 @@ export default function TransactionForm({ onTransactionAdded, onClose }) {
 
   const fileInputRef = useRef(null);
 
-  const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
+  const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5001';
 
   // Handle Receipt Upload
   const handleReceiptUpload = async (e) => {

@@ -20,7 +20,7 @@ export default function SmartInsights({ className = '' }) {
 
       // Call our backend endpoint
       const res = await axios.post(
-        `${import.meta.env.VITE_API_BASE || 'http://localhost:5000'}/api/ai/insights`,
+        `${import.meta.env.VITE_API_BASE || 'http://localhost:5001'}/api/ai/insights`,
         {}, // We send an empty body, the backend gets the user ID from the token
         { headers: { 'x-auth-token': token } }
       );

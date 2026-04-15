@@ -27,7 +27,7 @@ export default function RegisterPage() {
 
     try {
       await axios.post(
-        `${import.meta.env.VITE_API_BASE || 'http://localhost:5000'}/api/auth/register`,
+        `${import.meta.env.VITE_API_BASE || 'http://localhost:5001'}/api/auth/register`,
         formData
       );
       navigate('/login');

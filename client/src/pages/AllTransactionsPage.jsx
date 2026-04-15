@@ -21,7 +21,7 @@ export default function AllTransactionsPage() {
       try {
         // Fetch ALL transactions from the backend
         const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE || 'http://localhost:5000'}/api/transactions`,
+          `${import.meta.env.VITE_API_BASE || 'http://localhost:5001'}/api/transactions`,
           config
         );
         setTransactions(res.data); // Store all fetched transactions
@@ -49,7 +49,7 @@ export default function AllTransactionsPage() {
     });
   };
 
-  const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
+  const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5001';
 
   // Delete a transaction
   const handleDelete = async (id) => {

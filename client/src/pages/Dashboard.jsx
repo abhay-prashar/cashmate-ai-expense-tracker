@@ -16,7 +16,7 @@ export default function Dashboard() {
   const [deletingIds, setDeletingIds] = useState([]);
   const navigate = useNavigate();
 
-  const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000';
+  const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5001';
 
   const fetchTransactions = async () => {
     const token = localStorage.getItem('token');
